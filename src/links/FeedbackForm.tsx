@@ -10,7 +10,7 @@ type Feedback = {
 }
 
 type Props = {
-  addFeedback: (feedback: Omit<Feedback, 'feedbackId'>) => void
+  addFeedback: (feedback: Omit<Feedback, 'feedbackId'>) => Promise<void>
 }
 
 function FeedbackForm({ addFeedback }: Props) {
@@ -34,7 +34,7 @@ function FeedbackForm({ addFeedback }: Props) {
     })
   }
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
     if (!formData.teacherName || !formData.subject || !formData.comments) {
@@ -42,7 +42,7 @@ function FeedbackForm({ addFeedback }: Props) {
       return
     }
 
-    addFeedback({
+    await addFeedback({
       teacherName: formData.teacherName,
       subject: formData.subject,
       rating: formData.rating as 1 | 2 | 3 | 4 | 5,

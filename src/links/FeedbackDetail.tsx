@@ -11,8 +11,8 @@ type Feedback = {
 
 type Props = {
   feedbacks: Feedback[]
-  updateFeedback: (updated: Feedback) => void
-  deleteFeedback: (id: string) => void
+  updateFeedback: (updated: Feedback) => Promise<void>
+  deleteFeedback: (id: string) => Promise<void>
 }
 
 function FeedbackDetail({ feedbacks, updateFeedback, deleteFeedback }: Props) {
@@ -43,21 +43,23 @@ function FeedbackDetail({ feedbacks, updateFeedback, deleteFeedback }: Props) {
     })
   }
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!formData.teacherName || !formData.subject || !formData.comments) {
       alert('Please fill in all fields.')
       return
     }
-    updateFeedback({
+
+    await updateFeedback({
       ...formData,
       rating: formData.rating as 1 | 2 | 3 | 4 | 5
     })
+
     setIsEditing(false)
   }
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (confirm('Are you sure you want to delete this feedback?')) {
-      deleteFeedback(feedback.feedbackId)
+      await deleteFeedback(feedback.feedbackId)
       navigate('/')
     }
   }

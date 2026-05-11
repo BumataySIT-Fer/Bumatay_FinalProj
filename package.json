@@ -10,7 +10,11 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "body-parser": "^2.2.2",
     "bootstrap": "^5.3.8",
+    "cors": "^2.8.6",
+    "express": "^5.2.1",
+    "mongoose": "^9.6.2",
     "react": "^19.2.6",
     "react-bootstrap": "^2.10.10",
     "react-dom": "^19.2.6",
@@ -29,5 +33,18 @@
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.59.2",
     "vite": "^8.0.12"
-  }
+  },
+  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
+  "main": "eslint.config.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/BumataySIT-Fer/FinalsProject.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/BumataySIT-Fer/FinalsProject/issues"
+  },
+  "homepage": "https://github.com/BumataySIT-Fer/FinalsProject#readme"
 }

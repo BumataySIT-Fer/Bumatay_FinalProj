@@ -13,33 +13,114 @@ type Feedback = {
   comments: string
 }
 
+const BASE_URL = 'http://localhost:5000'
+
 function App() {
-  const [feedbacks, setFeedbacks] = useState<Feedback[]>(() => {
-    const stored = localStorage.getItem('feedbacks')
-    return stored ? JSON.parse(stored) : []
-  })
+  const [feedbacks, setFeedbacks] = useState<Feedback[]>([])
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
+  // GET all feedbacks on mount
   useEffect(() => {
-    localStorage.setItem('feedbacks', JSON.stringify(feedbacks))
-  }, [feedbacks])
-
-  const addFeedback = (feedback: Omit<Feedback, 'feedbackId'>) => {
-    const newFeedback: Feedback = {
-      feedbackId: Date.now().toString(),
-      ...feedback
+    const fetchFeedbacks = async () => {
+      setLoading(true)
+      try {
+        const res = await fetch(`${BASE_URL}/api/feedbacks`)
+        const data = await res.json()
+        // map _id to feedbackId
+        const mapped = data.map((f: any) => ({
+          feedbackId: f._id,
+          teacherName: f.teacherName,
+          subject: f.subject,
+          rating: f.rating,
+          comments: f.comments
+        }))
+        setFeedbacks(mapped)
+      } catch (err) {
+        setError('Failed to fetch feedbacks')
+      } finally {
+        setLoading(false)
+      }
     }
-    setFeedbacks([...feedbacks, newFeedback])
+
+    fetchFeedbacks()
+  }, [])
+
+  // POST create feedback
+  const addFeedback = async (feedback: Omit<Feedback, 'feedbackId'>) => {
+    try {
+      const res = await fetch(`${BASE_URL}/api/feedbacks`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(feedback)
+      })
+      const data = await res.json()
+      const newFeedback: Feedback = {
+        feedbackId: data._id,
+        teacherName: data.teacherName,
+        subject: data.subject,
+        rating: data.rating,
+        comments: data.comments
+      }
+      setFeedbacks([...feedbacks, newFeedback])
+    } catch (err) {
+      setError('Failed to create feedback')
+    }
   }
 
-  const updateFeedback = (updated: Feedback) => {
-    setFeedbacks(feedbacks.map(f =>
-      f.feedbackId === updated.feedbackId ? updated : f
-    ))
+  // PUT update feedback
+  const updateFeedback = async (updated: Feedback) => {
+    try {
+      const res = await fetch(`${BASE_URL}/api/feedbacks/${updated.feedbackId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          teacherName: updated.teacherName,
+          subject: updated.subject,
+          rating: updated.rating,
+          comments: updated.comments
+        })
+      })
+      const data = await res.json()
+      const updatedFeedback: Feedback = {
+        feedbackId: data._id,
+        teacherName: data.teacherName,
+        subject: data.subject,
+        rating: data.rating,
+        comments: data.comments
+      }
+      setFeedbacks(feedbacks.map(f =>
+        f.feedbackId === updated.feedbackId ? updatedFeedback : f
+      ))
+    } catch (err) {
+      setError('Failed to update feedback')
+    }
   }
 
-  const deleteFeedback = (id: string) => {
-    setFeedbacks(feedbacks.filter(f => f.feedbackId !== id))
+  // DELETE feedback
+  const deleteFeedback = async (id: string) => {
+    try {
+      await fetch(`${BASE_URL}/api/feedbacks/${id}`, {
+        method: 'DELETE'
+      })
+      setFeedbacks(feedbacks.filter(f => f.feedbackId !== id))
+    } catch (err) {
+      setError('Failed to delete feedback')
+    }
   }
+
+  if (loading) return (
+    <div className="container mt-5 text-center">
+      <div className="spinner-border text-primary" role="status" />
+      <p className="mt-2">Loading feedbacks...</p>
+    </div>
+  )
+
+  if (error) return (
+    <div className="container mt-5">
+      <div className="alert alert-danger">{error}</div>
+    </div>
+  )
 
   return (
     <BrowserRouter>

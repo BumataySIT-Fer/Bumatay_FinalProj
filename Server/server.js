@@ -6,9 +6,9 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect("mongodb://20253253_db_user:llfPag0lTEYalFSd@ac-c0lg2vc-shard-00-00.cin4reg.mongodb.net:27017,ac-c0lg2vc-shard-00-01.cin4reg.mongodb.net:27017,ac-c0lg2vc-shard-00-02.cin4reg.mongodb.net:27017/apptech?ssl=true&replicaSet=atlas-uan24d-shard-0&authSource=admin&retryWrites=true&w=majority")
-    .then(() => console.log("Successfully Connected to MongoDB"))
-    .catch(console.error);
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => console.log("Successfully Connected to MongoDB"))
+  .catch(console.error);
 
 // Feedback Schema
 const feedbackSchema = new mongoose.Schema({

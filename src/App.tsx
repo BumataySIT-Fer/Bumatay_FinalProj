@@ -15,7 +15,7 @@ type Feedback = {
   comments: string
 }
 
-const BASE_URL = 'http://localhost:5000'
+const BASE_URL = 'https://bumatayfinalproj-production.up.railway.app'
 
 function App() {
   const [feedbacks, setFeedbacks] = useState<Feedback[]>([])

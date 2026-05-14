@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Navbar from './links/Navbar'
-import HomePage from './links/Homepage'
 import FeedbackList from './links/FeedbackList'
 import FeedbackForm from './links/FeedbackForm'
 import FeedbackDetail from './links/FeedbackDetail'
+import HomePage from './links/Homepage'
 
 
 type Feedback = {

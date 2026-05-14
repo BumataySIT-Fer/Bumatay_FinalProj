@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import Navbar from './links/Navbar'
+import HomePage from './links/Homepage'
 import FeedbackList from './links/FeedbackList'
 import FeedbackForm from './links/FeedbackForm'
 import FeedbackDetail from './links/FeedbackDetail'
+
 
 type Feedback = {
   feedbackId: string
@@ -127,23 +129,24 @@ function App() {
       <Navbar />
       <main>
         <Routes>
-          <Route path="/" element={
-            <FeedbackList
-              feedbacks={feedbacks}
-              deleteFeedback={deleteFeedback}
-            />}
-          />
-          <Route path="/feedback/new" element={
-            <FeedbackForm addFeedback={addFeedback} />}
-          />
-          <Route path="/feedback/:id" element={
-            <FeedbackDetail
-              feedbacks={feedbacks}
-              updateFeedback={updateFeedback}
-              deleteFeedback={deleteFeedback}
-            />}
-          />
-        </Routes>
+  <Route path="/" element={<HomePage />} />
+  <Route path="/feedbacks" element={
+    <FeedbackList
+      feedbacks={feedbacks}
+      deleteFeedback={deleteFeedback}
+    />}
+  />
+  <Route path="/feedback/new" element={
+    <FeedbackForm addFeedback={addFeedback} />}
+  />
+  <Route path="/feedback/:id" element={
+    <FeedbackDetail
+      feedbacks={feedbacks}
+      updateFeedback={updateFeedback}
+      deleteFeedback={deleteFeedback}
+    />}
+  />
+</Routes>
       </main>
     </BrowserRouter>
   )
